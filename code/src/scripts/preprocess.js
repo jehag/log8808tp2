@@ -82,21 +82,22 @@ export function summarizeYearlyCounts (data) {
 export function fillMissingData (data, neighborhoods, start, end, range) {
   // TODO : Find missing data and fill with 0
   neighborhoods.forEach(neighborhood => {
-    for (var i = start; i < end; i++) {
+    for (var i = start; i <= end; i++) {
       let found = false
       data.forEach(element => {
-        if (element.Arrond_Nom === neighborhood && element.Plantation_Year === i) {
+        if (element.Arrond_Nom === neighborhood && element.Plantation_Year === i.toString()) {
           found = true
         }
       })
       if (!found) {
         const newEntry = {}
         newEntry.Arrond_Nom = neighborhood
-        newEntry.Plantation_Year = i
+        newEntry.Plantation_Year = i.toString()
         newEntry.Comptes = 0
         data.push(newEntry)
       }
     }
   })
+  console.log(data)
   return data
 }
