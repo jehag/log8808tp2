@@ -55,4 +55,17 @@ export function initLegendAxis () {
  */
 export function draw (x, y, height, width, fill, colorScale) {
   // TODO : Draw the legend
+  d3.select('.legend.bar')
+    .attr('x', x)
+    .attr('y', y)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', fill)
+
+  d3.select('.legend.axis')
+    .attr('transform', `translate(${x}, ${y})`)
+    .call(d3.axisLeft(d3.scaleLinear()
+      .domain(colorScale.domain())
+      .range([height, 0]))
+      .ticks(7))
 }

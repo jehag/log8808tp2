@@ -1,4 +1,3 @@
-
 /**
  * Sets the domain of the color scale
  *
@@ -7,6 +6,7 @@
  */
 export function setColorScaleDomain (colorScale, data) {
   // TODO : Set domain of color scale
+  colorScale.domain([d3.min(data.map(element => element.Comptes)), d3.max(data.map(element => element.Comptes))])
 }
 
 /**
@@ -16,6 +16,13 @@ export function setColorScaleDomain (colorScale, data) {
  */
 export function appendRects (data) {
   // TODO : Append SVG rect elements
+  d3.select('#graph-g')
+    .selectAll('.group')
+    .data(data)
+    .enter()
+    .append('g')
+    .append('svg')
+    .append('rect')
 }
 
 /**
@@ -28,6 +35,8 @@ export function appendRects (data) {
  */
 export function updateXScale (xScale, data, width, range) {
   // TODO : Update X scale
+  xScale.domain(range(d3.min(data.map(element => element.Plantation_Year)), d3.max(data.map(element => element.Plantation_Year))))
+    .range([0, width])
 }
 
 /**
@@ -40,6 +49,9 @@ export function updateXScale (xScale, data, width, range) {
 export function updateYScale (yScale, neighborhoodNames, height) {
   // TODO : Update Y scale
   // Make sure to sort the neighborhood names alphabetically
+  neighborhoodNames.sort()
+  yScale.domain(neighborhoodNames)
+    .range([0, height])
 }
 
 /**
@@ -49,6 +61,8 @@ export function updateYScale (yScale, neighborhoodNames, height) {
  */
 export function drawXAxis (xScale) {
   // TODO : Draw X axis
+  d3.select('.x.axis')
+    .call(d3.axisTop(xScale))
 }
 
 /**
@@ -59,6 +73,9 @@ export function drawXAxis (xScale) {
  */
 export function drawYAxis (yScale, width) {
   // TODO : Draw Y axis
+  d3.select('.y.axis')
+    .attr('transform', `translate(${width}, 0)`)
+    .call(d3.axisRight(yScale))
 }
 
 /**
@@ -66,6 +83,9 @@ export function drawYAxis (yScale, width) {
  */
 export function rotateYTicks () {
   // TODO : Rotate Y ticks.
+  d3.select('.y.axis')
+    .selectAll('text')
+    .attr('transform', 'rotate(-30)')
 }
 
 /**
@@ -78,4 +98,13 @@ export function rotateYTicks () {
  */
 export function updateRects (xScale, yScale, colorScale) {
   // TODO : Set position, size and fill of rectangles according to bound data
+  d3.select('#graph-g')
+    // .selectAll('g')
+    // .select('svg')
+    .selectAll('rect')
+    .attr('fill', element => colorScale(element.Comptes))
+    .attr('height', yScale.bandwidth())
+    .attr('y', element => yScale(element.Arrond_Nom))
+    .attr('width', xScale.bandwidth())
+    .attr('x', element => xScale(element.Plantation_Year))
 }

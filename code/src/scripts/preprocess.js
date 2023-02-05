@@ -51,7 +51,7 @@ export function summarizeYearlyCounts (data) {
     result.forEach(arrond => {
       // console.log(element.Arrond_Nom === arrond.Arrond_Nom, arrond.Arrond_Nom, element.Arrond_Nom)
       // console.log(arrond.Date_Plantation === JSON.stringify(element.Date_Plantation).substring(1, 5), JSON.stringify(element.Date_Plantation).substring(1, 5), arrond.Date_Plantation)
-      if (element.Arrond_Nom === arrond.Arrond_Nom && JSON.stringify(element.Date_Plantation).substring(1, 5) === arrond.Plantation_Year) {
+      if (element.Arrond_Nom === arrond.Arrond_Nom && parseInt(JSON.stringify(element.Date_Plantation).substring(1, 5)) === arrond.Plantation_Year) {
         arrond.Comptes += 1
         found = true
       }
@@ -59,7 +59,7 @@ export function summarizeYearlyCounts (data) {
     if (!found) {
       const newEntry = {}
       newEntry.Arrond_Nom = element.Arrond_Nom
-      newEntry.Plantation_Year = JSON.stringify(element.Date_Plantation).substring(1, 5)
+      newEntry.Plantation_Year = parseInt(JSON.stringify(element.Date_Plantation).substring(1, 5))
       newEntry.Comptes = 1
       result.push(newEntry)
     }
@@ -85,19 +85,18 @@ export function fillMissingData (data, neighborhoods, start, end, range) {
     for (var i = start; i <= end; i++) {
       let found = false
       data.forEach(element => {
-        if (element.Arrond_Nom === neighborhood && element.Plantation_Year === i.toString()) {
+        if (element.Arrond_Nom === neighborhood && element.Plantation_Year === i) {
           found = true
         }
       })
       if (!found) {
         const newEntry = {}
         newEntry.Arrond_Nom = neighborhood
-        newEntry.Plantation_Year = i.toString()
+        newEntry.Plantation_Year = i
         newEntry.Comptes = 0
         data.push(newEntry)
       }
     }
   })
-  console.log(data)
   return data
 }
