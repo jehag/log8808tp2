@@ -14,9 +14,8 @@
  */
 export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, selectTicks, unselectTicks) {
   // TODO : Select the squares and set their event handlers
-  d3.select('#graph-g').selectAll('rect').on('mouseover', function () {
-    const thisSquare = d3.select(this)._groups[0][0].__data__
-    selectTicks(thisSquare.Arrond_Nom, thisSquare.Plantation_Year)
+  d3.select('#graph-g').selectAll('rect').on('mouseover', function (_, data) {
+    selectTicks(data.Arrond_Nom, data.Plantation_Year)
     rectSelected(this, xScale, yScale)
   }).on('mouseout', function () {
     unselectTicks()
@@ -44,9 +43,9 @@ export function rectSelected (element, xScale, yScale) {
     .attr('x', data => xScale(data.Plantation_Year) + xScale.bandwidth() / 2)
     .attr('y', data => yScale(data.Arrond_Nom) + yScale.bandwidth() / 1.5)
     .attr('text-anchor', 'middle')
-    .style('font-size', '14')
-    .style('font-weight', 'bold')
-    .style('fill', data => (data.Comptes >= 1000 ? 'white' : 'black'))
+    .attr('font-size', '14')
+    .attr('font-weight', 'bold')
+    .attr('fill', data => data.Comptes >= 1000 ? 'white' : 'black')
     .style('pointer-events', 'none')
     .text(data => data.Comptes.toString())
 }
@@ -74,9 +73,9 @@ export function rectUnselected (element) {
  */
 export function selectTicks (name, year) {
   // TODO : Make the ticks bold
-  d3.selectAll("g.axis text")._groups[0].forEach(e => {
-    if (e.__data__ === name || e.__data__ === year) {
-      e.style.fontWeight = 'bold'
+  d3.selectAll('g.axis text').each(function (data) {
+    if ([name, year].includes(data)) {
+      d3.select(this).style('font-weight', 'bold')
     }
   })
 }
@@ -86,7 +85,5 @@ export function selectTicks (name, year) {
  */
 export function unselectTicks () {
   // TODO : Unselect the ticks
-  d3.selectAll("g.axis text")._groups[0].forEach(e => {
-    e.style.fontWeight = ''
-  })
+  d3.selectAll('g.axis text').style('font-weight', '')
 }
