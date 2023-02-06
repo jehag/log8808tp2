@@ -14,6 +14,14 @@
  */
 export function setRectHandler (xScale, yScale, rectSelected, rectUnselected, selectTicks, unselectTicks) {
   // TODO : Select the squares and set their event handlers
+  d3.select('#graph-g').selectAll('rect').on('mouseenter', function() {
+    rectSelected(this, xScale, yScale)
+    const thisSquare = d3.select(this)._groups[0][0].__data__
+    selectTicks(thisSquare.Arrond_Nom, thisSquare.Plantation_Year)
+  }).on('mouseleave', function() {
+    rectUnselected(this)
+    unselectTicks()
+  })
 }
 
 /**
@@ -31,6 +39,18 @@ export function rectSelected (element, xScale, yScale) {
   // TODO : Display the number of trees on the selected element
   // Make sure the nimber is centered. If there are 1000 or more
   // trees, display the text in white so it contrasts with the background.
+  var data = d3.select(element).style('opacity',0.75).datum()
+  var boundingBox = d3.select(element).node().getBBox()
+  d3.select(element).append("text")
+  //We need to adjust the xScale and yScale because they give us the coordinates of the top left corner. By adding half of the width and half of the height we get the center coordinates
+  .attr('x', xScale(data.Plantation_Year)  + boundingBox.width / 2)
+  .attr('y', yScale(data.Arrond_Nom)+ boundingBox.height / 1.5 )
+  .attr('text-anchor', 'middle')
+  .style('font-size', '14')
+  .style('font-weight', 'bold')
+  .style('fill', (data.Comptes >= 1000 ? 'white' : 'black'))
+  .text(data.Comptes.toString())
+  console.log(data.Comptes)
 }
 
 /**
@@ -44,6 +64,8 @@ export function rectSelected (element, xScale, yScale) {
  */
 export function rectUnselected (element) {
   // TODO : Unselect the element
+  element.style.opacity = 1
+  d3.select(element).select("text").remove()
 }
 
 /**
@@ -54,6 +76,11 @@ export function rectUnselected (element) {
  */
 export function selectTicks (name, year) {
   // TODO : Make the ticks bold
+  d3.selectAll("g.axis text")._groups[0].forEach(e => {
+    if (e.__data__ === name || e.__data__ === year) {
+      e.style.fontWeight = 'bold'
+    }
+  })
 }
 
 /**
@@ -61,4 +88,7 @@ export function selectTicks (name, year) {
  */
 export function unselectTicks () {
   // TODO : Unselect the ticks
+  d3.selectAll("g.axis text")._groups[0].forEach(e => {
+    e.style.fontWeight = ''
+  })
 }
