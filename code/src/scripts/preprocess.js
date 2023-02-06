@@ -26,14 +26,7 @@ export function getNeighborhoodNames (data) {
  */
 export function filterYears (data, start, end) {
   // TODO : Filter the data by years
-  const result = []
-  data.forEach(element => {
-    const year = parseInt(JSON.stringify(element.Date_Plantation).substring(1, 5))
-    if (year >= start && year <= end) {
-      result.push(element)
-    }
-  })
-  return result
+  return data.filter(element => element.Date_Plantation.getFullYear() >= start && element.Date_Plantation.getFullYear() <= end)
 }
 
 /**
@@ -49,9 +42,7 @@ export function summarizeYearlyCounts (data) {
   data.forEach(element => {
     let found = false
     result.forEach(arrond => {
-      // console.log(element.Arrond_Nom === arrond.Arrond_Nom, arrond.Arrond_Nom, element.Arrond_Nom)
-      // console.log(arrond.Date_Plantation === JSON.stringify(element.Date_Plantation).substring(1, 5), JSON.stringify(element.Date_Plantation).substring(1, 5), arrond.Date_Plantation)
-      if (element.Arrond_Nom === arrond.Arrond_Nom && parseInt(JSON.stringify(element.Date_Plantation).substring(1, 5)) === arrond.Plantation_Year) {
+      if (element.Arrond_Nom === arrond.Arrond_Nom && element.Date_Plantation.getFullYear() === arrond.Plantation_Year) {
         arrond.Comptes += 1
         found = true
       }
@@ -59,7 +50,7 @@ export function summarizeYearlyCounts (data) {
     if (!found) {
       const newEntry = {}
       newEntry.Arrond_Nom = element.Arrond_Nom
-      newEntry.Plantation_Year = parseInt(JSON.stringify(element.Date_Plantation).substring(1, 5))
+      newEntry.Plantation_Year = element.Date_Plantation.getFullYear()
       newEntry.Comptes = 1
       result.push(newEntry)
     }
