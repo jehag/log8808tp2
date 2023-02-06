@@ -99,8 +99,6 @@ export function rotateYTicks () {
 export function updateRects (xScale, yScale, colorScale) {
   // TODO : Set position, size and fill of rectangles according to bound data
   d3.select('#graph-g')
-    // .selectAll('g')
-    // .select('svg')
     .selectAll('rect')
     .attr('fill', element => colorScale(element.Comptes))
     .attr('height', yScale.bandwidth())
