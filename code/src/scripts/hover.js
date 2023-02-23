@@ -73,10 +73,8 @@ export function rectUnselected (element) {
  */
 export function selectTicks (name, year) {
   // TODO : Make the ticks bold
-  d3.selectAll('g.axis text').each(function (data) {
-    if ([name, year].includes(data)) {
-      d3.select(this).style('font-weight', 'bold')
-    }
+  d3.selectAll('g.axis text').style('font-weight', function (element) {
+    return [name, year].includes(element) ? 'bold' : ''
   })
 }
 

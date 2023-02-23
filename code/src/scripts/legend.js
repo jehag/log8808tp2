@@ -56,11 +56,11 @@ export function initLegendAxis () {
 export function draw (x, y, height, width, fill, colorScale) {
   // TODO : Draw the legend
   d3.select('.legend.bar')
-    .attr('x', x)
+    .attr('fill', fill)
+    .attr('height', height)
     .attr('y', y)
     .attr('width', width)
-    .attr('height', height)
-    .attr('fill', fill)
+    .attr('x', x)
 
   d3.select('.legend.axis')
     .attr('transform', `translate(${x}, ${y})`)
